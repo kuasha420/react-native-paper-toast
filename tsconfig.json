@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es2015",
+    "outDir": "dist",
+    "rootDir": "src",
+    "experimentalDecorators": true,
+    "jsx": "react-native",
+    "lib": ["es2015", "es2016"],
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "noEmitHelpers": true,
+    "importHelpers": true,
+    "declaration": true,
+    "strict": true,
+    "noImplicitReturns": true
+  }
+}
