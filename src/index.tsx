@@ -1,6 +1,6 @@
-import React, { createContext, useMemo, useState, useContext } from 'react';
-import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
-import { Snackbar, Text } from 'react-native-paper';
+import React, { createContext, useContext, useMemo, useState } from 'react';
+import { Keyboard, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { Portal, Snackbar, Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -39,6 +39,7 @@ export const ToastProvider: React.FC = ({ children }) => {
     () => ({
       show(options: ToastOptions) {
         const { duration: d = 1500, message: m = 'Hello World', type: t = 'normal' } = options;
+        Keyboard.dismiss();
         setDuration(d);
         setMessage(m);
         setType(t);
@@ -53,16 +54,18 @@ export const ToastProvider: React.FC = ({ children }) => {
 
   return (
     <ToastContext.Provider value={toast}>
-      {children}
-      <Snackbar
-        onDismiss={toast.hide}
-        style={[types[type], { marginBottom: insets.bottom + 12 }]}
-        duration={duration}
-        visible={show}
-      >
-        <Icon size={20} name={icons[type]} color={'#ffffff'} />
-        <Text style={styles.message}>{` ${message}`}</Text>
-      </Snackbar>
+      <Portal.Host>{children}</Portal.Host>
+      <Portal>
+        <Snackbar
+          onDismiss={toast.hide}
+          style={[types[type], { marginBottom: insets.bottom + 12 }]}
+          duration={duration}
+          visible={show}
+        >
+          <Icon size={20} name={icons[type]} color="#ffffff" />
+          <Text style={styles.message}>{` ${message}`}</Text>
+        </Snackbar>
+      </Portal>
     </ToastContext.Provider>
   );
 };

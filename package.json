@@ -1,6 +1,6 @@
 {
   "name": "react-native-paper-toast",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A toast implementation for React Native Paper",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
