@@ -1,18 +1,27 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
-import { Keyboard, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import React, { createContext, useContext, useMemo, useReducer, useEffect } from 'react';
+import { Keyboard, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from 'react-native';
 import { Portal, Snackbar, Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type ToastType = 'info' | 'normal' | 'success' | 'warning' | 'error';
+type ToastPosition = 'top' | 'bottom' | 'middle';
 
 interface ToastParams {
   /** The message to show */
   message: string;
   /** Type of toast */
   type: ToastType;
+  /**  Position of the toast */
+  position: ToastPosition;
   /** Toast duration */
   duration: number;
+  /** Toast Visibility */
+  visibility: boolean;
+  /** Toast Action onPress */
+  action?: () => void;
+  /** Toast Action Label */
+  actionLabel: string;
 }
 
 /** All params are optional */
@@ -23,34 +32,98 @@ export interface ToastMethods {
   show(options: ToastOptions): void;
   /** Hide toast that are on display */
   hide(): void;
+  /** Directly Dispatch Toast Actions */
 }
 
-const ToastContext = createContext<ToastMethods>({ show() {}, hide() {} });
+const ToastContext = createContext<ToastMethods | null>(null);
 
-export const ToastProvider: React.FC = ({ children }) => {
-  const [message, setMessage] = useState('Hello World');
-  const [type, setType] = useState<ToastType>('normal');
-  const [duration, setDuration] = useState(1500);
-  const [show, setShow] = useState(false);
+interface ToastProviderProps {
+  /**
+   *  Override default values.
+   * ```tsx
+   * <ToastProvider overrides={{ position: 'top' }}>
+   *   <Application />
+   * </ToastProvider>
+   * ```
+   */
+  overrides?: ToastOptions;
+}
+
+const defaults: ToastParams = {
+  message: 'Hello React Native Paper Toast!',
+  type: 'normal',
+  position: 'bottom',
+  duration: 2000,
+  visibility: false,
+  action: undefined,
+  actionLabel: 'DONE',
+};
+
+const reducer = (state: ToastParams, action: ToastOptions) => {
+  const newState = { ...state, ...action };
+  return newState;
+};
+
+/**
+ * Wrap your component tree with ToastProvider. This should be after SafeAreaProvider & PaperProvider!
+ * ## Usage
+ * ```tsx
+ * import React from 'react';
+ * import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+ * import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context';
+ * import { ToastProvider } from 'react-native-paper-toast';
+ * import Application from './application';
+ *
+ * export default function App() {
+ *   return (
+ *     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+ *       <PaperProvider theme={DefaultTheme}>
+ *         <ToastProvider overrides={{ position: 'top' }}>
+ *           <Application />
+ *         </ToastProvider>
+ *       </PaperProvider>
+ *     </SafeAreaProvider>
+ *   );
+ * }
+ * ```
+ */
+export const ToastProvider: React.FC<ToastProviderProps> = ({ children, overrides }) => {
+  const initialState = useMemo(() => ({ ...defaults, ...overrides }), [overrides]);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const insets = useSafeAreaInsets();
+  const window = useWindowDimensions();
 
   const toast = useMemo(
     () => ({
       show(options: ToastOptions) {
-        const { duration: d = 1500, message: m = 'Hello World', type: t = 'normal' } = options;
         Keyboard.dismiss();
-        setDuration(d);
-        setMessage(m);
-        setType(t);
-        setShow(true);
+        dispatch({ ...initialState, ...options, visibility: true });
       },
       hide() {
-        setShow(false);
+        dispatch({ visibility: false });
       },
     }),
-    []
+    [initialState]
   );
+
+  const computedStyle: StyleProp<ViewStyle> = useMemo(() => {
+    const marginBottom =
+      state.position === 'bottom'
+        ? insets.bottom + 12
+        : state.position === 'top'
+        ? window.height - insets.top - 12
+        : window.height / 2;
+    return {
+      marginLeft: insets.left + 12,
+      marginRight: insets.right + 12,
+      marginBottom,
+    };
+  }, [insets.bottom, insets.left, insets.right, insets.top, state.position, window.height]);
+
+  useEffect(() => {
+    dispatch(initialState);
+  }, [initialState]);
 
   return (
     <ToastContext.Provider value={toast}>
@@ -58,20 +131,58 @@ export const ToastProvider: React.FC = ({ children }) => {
       <Portal>
         <Snackbar
           onDismiss={toast.hide}
-          style={[types[type], { marginBottom: insets.bottom + 12 }]}
-          duration={duration}
-          visible={show}
+          style={[types[state.type], computedStyle]}
+          duration={state.duration}
+          visible={state.visibility}
+          action={state.action ? { label: state.actionLabel, onPress: state.action } : undefined}
         >
-          <Icon size={20} name={icons[type]} color="#ffffff" />
-          <Text style={styles.message}>{` ${message}`}</Text>
+          <Icon size={20} name={icons[state.type]} color="#ffffff" />
+          <Text style={styles.message}>{` ${state.message}`}</Text>
         </Snackbar>
       </Portal>
     </ToastContext.Provider>
   );
 };
 
+/**
+ * useToast hook is used to show and hide Toast messages.
+ * ## Usage
+ * Import the `useToast` hook from the library. Calling it will return you an object with two functions `show` and `hide` to show or hide toast.
+ *
+ * ```tsx
+ * import { ToastProvider } from 'react-native-paper-toast';
+ *
+ * export const Screen: React.FC<Props> = (props) => {
+ *   const toaster = useToast();
+ *   // You can now toast methods from handler functions, effects or onPress props!
+ *
+ *   // Call from handler function
+ *   const handleError = () =>
+ *     toaster.show({ message: 'Invalid Username', type: 'error' });
+ *
+ *   // Call from Effects
+ *   useEffect(() => {
+ *     login(username, password).then((v) =>
+ *       toaster.show({ message: 'Login successful', duration: 2000 })
+ *     );
+ *   });
+ *
+ *   return (
+ *    <Surface>
+ *      <Button onPress={() => toaster.show({ message: 'Here is a toast for ya!' })}>
+ *        Show Toast
+ *      </Button>
+ *      <Button onPress={toaster.hide}>Hide Toast</Button>
+ *    </Surface>
+ *  );
+ * };
+ * ```
+ */
 export const useToast = () => {
   const toast = useContext(ToastContext);
+  if (!toast) {
+    throw new Error('useToast must be used within a ToastProvider.');
+  }
   return toast;
 };
 
@@ -92,7 +203,6 @@ type ToastStyles = {
 };
 
 const common: ViewStyle = {
-  marginHorizontal: 12,
   borderRadius: 20,
 };
 

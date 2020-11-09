@@ -9,6 +9,9 @@
 - Various toast types including info, warning and error. 👗
 - Written on TypeScript. 🔵
 - Supports Web (react-native-web). 🌞
+- 🔥 NEW: Attach action to toast. 🐍
+- 🔥 NEW: Set toast position (top, middle or bottom(default)). 🪜
+- 🔥 NEW: configure default options appwide! 💦
 
 ## Installation
 
@@ -84,16 +87,23 @@ export const Screen: React.FC<Props> = (props) => {
 
 ## API
 
-```typescript
+````typescript
 type ToastType = 'info' | 'normal' | 'success' | 'warning' | 'error';
+type ToastPosition = 'top' | 'bottom' | 'middle';
 
 interface ToastOptions {
-  /** The message to show */
+   /** The message to show */
   message?: string;
   /** Type of toast */
   type?: ToastType;
+  /**  Position of the toast */
+  position?: ToastPosition;
   /** Toast duration */
   duration?: number;
+  /** Toast Action onPress */
+  action?: () => void;
+  /** Toast Action Label */
+  actionLabel?: string;
 }
 
 interface ToastMethods {
@@ -103,8 +113,25 @@ interface ToastMethods {
     hide(): void;
 }
 
+interface ToastProviderProps {
+    /**
+     * App wide default overrides.
+     * Use this to set default position or duration of toasts
+     *
+     * ```tsx
+     * <ToastProvider overrides={{ position: 'top', duration: 3000 }}>
+     *   <Application />
+     * </ToastProvider>
+     * ```
+     */
+    overrides?: ToastOptions;
+}
+
+const ToastProvider: React.FC<ToastProviderProps>;
+
 function useToast: () => ToastMethods;
-```
+
+````
 
 ## License
 
