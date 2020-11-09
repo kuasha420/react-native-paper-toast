@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useMemo, useReducer, useEffect } from 'react';
-import { Keyboard, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from 'react-native';
+import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
+import { Keyboard, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { Portal, Snackbar, Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -92,13 +92,13 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children, override
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const insets = useSafeAreaInsets();
-  const window = useWindowDimensions();
 
   const toast = useMemo(
     () => ({
       show(options: ToastOptions) {
-        Keyboard.dismiss();
-        dispatch({ ...initialState, ...options, visibility: true });
+        const newState: ToastParams = { ...initialState, ...options, visibility: true };
+        newState.position === 'bottom' && Keyboard.dismiss();
+        dispatch(newState);
       },
       hide() {
         dispatch({ visibility: false });
@@ -107,19 +107,37 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children, override
     [initialState]
   );
 
-  const computedStyle: StyleProp<ViewStyle> = useMemo(() => {
-    const marginBottom =
-      state.position === 'bottom'
-        ? insets.bottom + 12
-        : state.position === 'top'
-        ? window.height - insets.top - 12
-        : window.height / 2;
-    return {
-      marginLeft: insets.left + 12,
-      marginRight: insets.right + 12,
-      marginBottom,
+  const computedStyle = useMemo(() => {
+    const ecommon: StyleProp<ViewStyle> = {
+      position: 'absolute',
+      left: insets.left,
+      right: insets.right,
+      width: undefined,
+      alignItems: 'center',
     };
-  }, [insets.bottom, insets.left, insets.right, insets.top, state.position, window.height]);
+    let estyles: StyleProp<ViewStyle>;
+    if (state.position === 'bottom') {
+      estyles = {
+        ...ecommon,
+        bottom: insets.bottom,
+      };
+    } else if (state.position === 'top') {
+      estyles = {
+        ...ecommon,
+        top: insets.top,
+        bottom: undefined,
+      };
+    } else {
+      estyles = {
+        ...ecommon,
+        top: insets.top,
+        bottom: insets.bottom,
+        width: undefined,
+        justifyContent: 'center',
+      };
+    }
+    return estyles;
+  }, [insets, state.position]);
 
   useEffect(() => {
     dispatch(initialState);
@@ -131,7 +149,8 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children, override
       <Portal>
         <Snackbar
           onDismiss={toast.hide}
-          style={[types[state.type], computedStyle]}
+          style={types[state.type]}
+          wrapperStyle={computedStyle}
           duration={state.duration}
           visible={state.visibility}
           action={state.action ? { label: state.actionLabel, onPress: state.action } : undefined}
