@@ -57,7 +57,7 @@ export default function App() {
 Import the `useToast` hook from the library. Calling it will return you an object with two functions `show` and `hide` to show or hide toast.
 
 ```tsx
-import { ToastProvider } from 'react-native-paper-toast';
+import { useToast } from 'react-native-paper-toast';
 
 export const Screen: React.FC<Props> = (props) => {
   const toaster = useToast();
