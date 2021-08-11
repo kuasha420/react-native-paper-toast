@@ -1,14 +1,13 @@
 {
   "name": "react-native-paper-toast",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "A toast implementation for React Native Paper",
   "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "react-native": "dist/esm/index.js",
   "types": "dist/index.d.ts",
-  "react-native": "src/index.tsx",
   "files": [
     "/dist",
-    "/src",
-    "bsconfig.json",
     "package.json",
     "LICENSE"
   ],
@@ -28,7 +27,7 @@
     "react-native-vector-icons": ">=6"
   },
   "scripts": {
-    "prepare": "rm -rf ./dist/* && tsc"
+    "prepare": "rm -rf ./dist/* && tsc && tsc -p ./tsconfig.esm.json"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^2.0.0",
