@@ -3,51 +3,18 @@ import { Keyboard, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { Portal, Snackbar, Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-type ToastType = 'info' | 'normal' | 'success' | 'warning' | 'error';
-type ToastPosition = 'top' | 'bottom' | 'middle';
-
-interface ToastParams {
-  /** The message to show */
-  message: string;
-  /** Type of toast */
-  type: ToastType;
-  /**  Position of the toast */
-  position: ToastPosition;
-  /** Toast duration */
-  duration: number;
-  /** Toast Visibility */
-  visibility: boolean;
-  /** Toast Action onPress */
-  action?: () => void;
-  /** Toast Action Label */
-  actionLabel: string;
-}
-
-/** All params are optional */
-export type ToastOptions = Partial<ToastParams>;
-
-export interface ToastMethods {
-  /** Show a new toast */
-  show(options: ToastOptions): void;
-  /** Hide toast that are on display */
-  hide(): void;
-  /** Directly Dispatch Toast Actions */
-}
+import {
+  ToastAction,
+  ToastActionType,
+  ToastIconType,
+  ToastMethods,
+  ToastOptions,
+  ToastParams,
+  ToastProviderProps,
+  ToastStyles,
+} from './types';
 
 const ToastContext = createContext<ToastMethods | null>(null);
-
-interface ToastProviderProps {
-  /**
-   *  Override default values.
-   * ```tsx
-   * <ToastProvider overrides={{ position: 'top' }}>
-   *   <Application />
-   * </ToastProvider>
-   * ```
-   */
-  overrides?: ToastOptions;
-}
 
 const defaults: ToastParams = {
   message: 'Hello React Native Paper Toast!',
@@ -59,9 +26,20 @@ const defaults: ToastParams = {
   actionLabel: 'DONE',
 };
 
-const reducer = (state: ToastParams, action: ToastOptions) => {
-  const newState = { ...state, ...action };
-  return newState;
+const reducer = (state: ToastParams, action: ToastAction) => {
+  switch (action.type) {
+    case ToastActionType.SHOW:
+      return { ...state, ...action.payload };
+
+    case ToastActionType.HYDRATE:
+      return { ...state, ...action.payload, visibility: false };
+
+    case ToastActionType.HIDE:
+      return { ...state, visibility: false };
+
+    default:
+      return state;
+  }
 };
 
 /**
@@ -87,7 +65,7 @@ const reducer = (state: ToastParams, action: ToastOptions) => {
  * }
  * ```
  */
-export const ToastProvider: React.FC<ToastProviderProps> = ({ children, overrides }) => {
+const ToastProvider: React.FC<ToastProviderProps> = ({ children, overrides }) => {
   const initialState = useMemo(() => ({ ...defaults, ...overrides }), [overrides]);
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -98,51 +76,50 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children, override
       show(options: ToastOptions) {
         const newState: ToastParams = { ...initialState, ...options, visibility: true };
         newState.position === 'bottom' && Keyboard.dismiss();
-        dispatch(newState);
+        dispatch({ type: ToastActionType.SHOW, payload: newState });
       },
       hide() {
-        dispatch({ visibility: false });
+        dispatch({ type: ToastActionType.HIDE });
       },
     }),
     [initialState]
   );
 
   const computedStyle = useMemo(() => {
-    const ecommon: StyleProp<ViewStyle> = {
+    const base: StyleProp<ViewStyle> = {
       position: 'absolute',
       left: insets.left,
       right: insets.right,
       width: undefined,
       alignItems: 'center',
     };
-    let estyles: StyleProp<ViewStyle>;
+    let style: StyleProp<ViewStyle>;
     if (state.position === 'bottom') {
-      estyles = {
-        ...ecommon,
+      style = {
+        ...base,
         bottom: insets.bottom,
       };
-      return estyles;
+      return style;
     }
     if (state.position === 'top') {
-      estyles = {
-        ...ecommon,
+      style = {
+        ...base,
         top: insets.top,
         bottom: undefined,
       };
-      return estyles;
+      return style;
     }
-    estyles = {
-      ...ecommon,
+    style = {
+      ...base,
       top: insets.top,
       bottom: insets.bottom,
-      width: undefined,
       justifyContent: 'center',
     };
-    return estyles;
+    return style;
   }, [insets, state.position]);
 
   useEffect(() => {
-    dispatch(initialState);
+    dispatch({ type: ToastActionType.HYDRATE, payload: initialState });
   }, [initialState]);
 
   return (
@@ -171,7 +148,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children, override
  * Import the `useToast` hook from the library. Calling it will return you an object with two functions `show` and `hide` to show or hide toast.
  *
  * ```tsx
- * import { ToastProvider } from 'react-native-paper-toast';
+ * import { useToast } from 'react-native-paper-toast';
  *
  * export const Screen: React.FC<Props> = (props) => {
  *   const toaster = useToast();
@@ -199,16 +176,12 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children, override
  * };
  * ```
  */
-export const useToast = () => {
+const useToast = () => {
   const toast = useContext(ToastContext);
   if (!toast) {
     throw new Error('useToast must be used within a ToastProvider.');
   }
   return toast;
-};
-
-type ToastIconType = {
-  [key in ToastType]: string;
 };
 
 const icons: ToastIconType = {
@@ -217,10 +190,6 @@ const icons: ToastIconType = {
   warning: 'alert-circle-outline',
   success: 'check-circle-outline',
   error: 'close-circle-outline',
-};
-
-type ToastStyles = {
-  [key in ToastType]: StyleProp<ViewStyle>;
 };
 
 const common: ViewStyle = {
@@ -256,3 +225,5 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
 });
+
+export { ToastProvider, useToast, ToastOptions, ToastProviderProps };

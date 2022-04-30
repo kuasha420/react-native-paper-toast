@@ -43,6 +43,7 @@
     "@types/react-native": "^0.67.3",
     "@types/react-native-vector-icons": "^6.4.5",
     "eslint": "^7.10.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "expo": "^44.0.6",
     "prettier": "^2.1.2",
     "react": "^16.13.1",

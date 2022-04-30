@@ -1,7 +1,5 @@
 # React Native Paper Toast
 
-[![Star IT Ltd](https://staritltd.com/wp-content/uploads/2019/10/Web_Logo_of_Star_IT_158x80.png)](https://staritltd.com)
-
 🔥 An easy to use toast implementation for React Native Paper 🔥
 
 - Toast persists accross screen transition. 🚀
@@ -12,6 +10,7 @@
 - 🔥 NEW: Attach action to toast. 🐍
 - 🔥 NEW: Set toast position (top, middle or bottom(default)). 🪜
 - 🔥 NEW: configure default options appwide! 💦
+- 🔥 NEW: Interactive example added! 💦
 
 ## Installation
 
@@ -132,6 +131,17 @@ const ToastProvider: React.FC<ToastProviderProps>;
 function useToast: () => ToastMethods;
 
 ````
+
+## Development
+
+This project integrates with `react-native-builder-bob`. To get started:
+
+1. Fork and Clone the repository.
+2. Create your feature branch.
+3. Install dependencies using `yarn`.
+4. Run example project using `yarn example android`, `yarn example ios` or `yarn example web`.
+5. Make your changes and create a PR!
+6. Thank you.
 
 ## License
 
