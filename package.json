@@ -2,11 +2,16 @@
   "name": "react-native-paper-toast",
   "version": "1.2.0",
   "description": "A toast implementation for React Native Paper",
-  "main": "dist/index.js",
-  "module": "dist/esm/index.js",
-  "react-native": "dist/esm/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/commonjs/index.js",
+  "module": "dist/module/index.js",
+  "react-native": "src/index.tsx",
+  "types": "dist/typescript/src/index.d.ts",
   "files": [
+    "src",
+    "dist",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
     "/dist",
     "package.json",
     "LICENSE"
@@ -27,7 +32,7 @@
     "react-native-vector-icons": ">=6"
   },
   "scripts": {
-    "prepare": "rm -rf ./dist/* && tsc && tsc -p ./tsconfig.esm.json"
+    "prepare": "bob build"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^2.0.0",
@@ -38,9 +43,23 @@
     "prettier": "^2.1.2",
     "react": "^16.13.1",
     "react-native": "^0.63.3",
+    "react-native-builder-bob": "^0.18.2",
     "react-native-paper": "^4.2.0",
     "react-native-safe-area-context": "^3.1.8",
     "react-native-vector-icons": "7.1.0",
     "typescript": "^4.0.3"
-  }
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "dist",
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "dist/"
+  ]
 }

@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "dist/esm",
-    "module": "es2020",
-    "target": "ES2015",
-    "declarationDir": "dist/esm"
-  }
-}
