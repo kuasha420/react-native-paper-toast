@@ -121,21 +121,23 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children, override
         ...ecommon,
         bottom: insets.bottom,
       };
-    } else if (state.position === 'top') {
+      return estyles;
+    }
+    if (state.position === 'top') {
       estyles = {
         ...ecommon,
         top: insets.top,
         bottom: undefined,
       };
-    } else {
-      estyles = {
-        ...ecommon,
-        top: insets.top,
-        bottom: insets.bottom,
-        width: undefined,
-        justifyContent: 'center',
-      };
+      return estyles;
     }
+    estyles = {
+      ...ecommon,
+      top: insets.top,
+      bottom: insets.bottom,
+      width: undefined,
+      justifyContent: 'center',
+    };
     return estyles;
   }, [insets, state.position]);
 
