@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
 import { loadAsync } from 'expo-font';
-import { Provider as PaperProvider } from 'react-native-paper';
-import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
 import { ToastProvider } from 'react-native-paper-toast';
+import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context';
 import Application from './application';
-import { ActivityIndicator } from 'react-native-paper';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);

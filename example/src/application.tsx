@@ -1,15 +1,15 @@
 import React, { useCallback, useReducer } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 import {
   Button,
-  Surface,
-  TextInput,
-  ToggleButton,
-  Text,
   Headline,
   Subheading,
+  Surface,
+  Text,
+  TextInput,
+  ToggleButton,
 } from 'react-native-paper';
 import { ToastOptions, useToast } from 'react-native-paper-toast';
-import { StyleSheet, View, Alert } from 'react-native';
 
 const initialToast: ToastOptions = { message: 'Here is a toast for ya!' };
 
