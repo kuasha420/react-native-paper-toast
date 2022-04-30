@@ -10,7 +10,7 @@
 - 🔥 NEW: Attach action to toast. 🐍
 - 🔥 NEW: Set toast position (top, middle or bottom(default)). 🪜
 - 🔥 NEW: configure default options appwide! 💦
-- 🔥 NEW: Interactive example added! 💦
+- 🔥 NEW: Interactive example added! 🎉
 
 ## Installation
 
