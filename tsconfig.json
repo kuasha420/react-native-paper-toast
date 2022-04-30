@@ -1,23 +1,27 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "lib": ["es6", "dom", "esnext.asynciterable"],
-    "sourceMap": true,
-    "allowJs": true,
-    "jsx": "react",
-    "moduleResolution": "node",
-    "isolatedModules": true,
+    "baseUrl": "./",
+    "paths": {
+      "react-native-paper-toast": ["./src/index"]
+    },
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
     "esModuleInterop": true,
-    "rootDir": "src",
-    "strict": true,
+    "importsNotUsedAsValues": "error",
     "forceConsistentCasingInFileNames": true,
-    "suppressImplicitAnyIndexErrors": true,
+    "jsx": "react",
+    "lib": ["esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitUseStrict": false,
+    "noStrictGenericChecks": false,
     "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "declaration": true,
-    "declarationMap": true,
-    "module": "commonjs",
-    "target": "es2015"
-  },
-  "exclude": ["node_modules", "dist"]
+    "strict": true,
+    "target": "esnext"
+  }
 }

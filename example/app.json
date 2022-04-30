@@ -1,0 +1,22 @@
+{
+  "name": "react-native-paper-toast-example",
+  "displayName": "PaperToast Example",
+  "expo": {
+    "name": "react-native-paper-toast-example",
+    "slug": "react-native-paper-toast-example",
+    "description": "Example app for react-native-paper-toast",
+    "privacy": "public",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
