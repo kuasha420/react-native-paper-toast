@@ -31,8 +31,6 @@ const reducer = (state: ToastParams, action: ToastAction) => {
     case ToastActionType.SHOW:
       return { ...state, ...action.payload };
 
-    case ToastActionType.HYDRATE:
-      return { ...state, ...action.payload, visibility: false };
 
     case ToastActionType.HIDE:
       return { ...state, visibility: false };
