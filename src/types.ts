@@ -50,7 +50,7 @@ export enum ToastActionType {
 
 export interface ToastAction {
   type: ToastActionType;
-  payload?: ToastOptions;
+//   payload?: ToastOptions;
 }
 
 export type ToastIconType = {
