@@ -25,7 +25,7 @@ export interface ToastParams {
 
 export interface ToastMethods {
   /** Show a new toast */
-  show(options: ToastOptions): void;
+//   show(options: ToastOptions): void;
   /** Hide toast that are on display */
   hide(): void;
 }
