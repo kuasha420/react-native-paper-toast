@@ -21,7 +21,7 @@ export interface ToastParams {
 }
 
 /** All params are optional */
-export type ToastOptions = Partial<ToastParams>;
+// export type ToastOptions = Partial<ToastParams>;
 
 export interface ToastMethods {
   /** Show a new toast */
@@ -30,17 +30,17 @@ export interface ToastMethods {
   hide(): void;
 }
 
-export interface ToastProviderProps {
-  /**
-   *  Override default values.
-   * ```tsx
-   * <ToastProvider overrides={{ position: 'top' }}>
-   *   <Application />
-   * </ToastProvider>
-   * ```
-   */
-  overrides?: ToastOptions;
-}
+// export interface ToastProviderProps {
+//   /**
+//    *  Override default values.
+//    * ```tsx
+//    * <ToastProvider overrides={{ position: 'top' }}>
+//    *   <Application />
+//    * </ToastProvider>
+//    * ```
+//    */
+//   overrides?: ToastOptions;
+// }
 
 export enum ToastActionType {
   SHOW = 'SHOW',
