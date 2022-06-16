@@ -199,7 +199,7 @@ const common: ViewStyle = {
 const types: ToastStyles = {
   info: {
     ...common,
-    backgroundColor: 'rgba(81,98,188,0.9)',
+    backgroundColor: 'rgba(39, 182, 204)',
   },
   normal: {
     ...common,
@@ -226,4 +226,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { ToastProvider, useToast, ToastOptions, ToastProviderProps };
+export { ToastProvider, useToast };
