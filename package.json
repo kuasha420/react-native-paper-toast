@@ -1,6 +1,6 @@
 {
   "name": "react-native-paper-toast",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A toast implementation for React Native Paper",
   "main": "dist/commonjs/index.js",
   "module": "dist/module/index.js",
