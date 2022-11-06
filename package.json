@@ -36,7 +36,8 @@
     "bootstrap": "yarn example && yarn",
     "example": "yarn --cwd example",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "rm -rf ./dist/* && bob build"
+    "prepare": "rm -rf ./dist/* && bob build",
+    "prepublishOnly": "yarn"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^2.0.0",
