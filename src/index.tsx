@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
-import { Keyboard, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { Keyboard, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Portal, Snackbar, Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -24,6 +24,9 @@ const defaults: ToastParams = {
   visibility: false,
   action: undefined,
   actionLabel: 'DONE',
+  messageStyle: {},
+  messageContainerStyle: {},
+  snackbarStyle: {},
 };
 
 const reducer = (state: ToastParams, action: ToastAction) => {
@@ -128,14 +131,16 @@ const ToastProvider: React.FC<ToastProviderProps> = ({ children, overrides }) =>
       <Portal>
         <Snackbar
           onDismiss={toast.hide}
-          style={types[state.type]}
+          style={[types[state.type], state.snackbarStyle]}
           wrapperStyle={computedStyle}
           duration={state.duration}
           visible={state.visibility}
           action={state.action ? { label: state.actionLabel, onPress: state.action } : undefined}
         >
-          <Icon size={20} name={icons[state.type]} color="#ffffff" />
-          <Text style={styles.message}>{` ${state.message}`}</Text>
+          <View style={state.messageContainerStyle}>
+            <Icon size={20} name={icons[state.type]} color="#ffffff" />
+            <Text style={[styles.message, state.messageStyle]}>{` ${state.message}`}</Text>
+          </View>
         </Snackbar>
       </Portal>
     </ToastContext.Provider>
