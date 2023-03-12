@@ -103,6 +103,12 @@ interface ToastOptions {
   action?: () => void;
   /** Toast Action Label */
   actionLabel?: string;
+  /** Toast Message Style */
+  messageStyle: StyleProp<ViewStyle>;
+  /** Toast Message Container Style */
+  messageContainerStyle: StyleProp<ViewStyle>;
+  /** Toast Snackbar Style */
+  snackbarStyle: StyleProp<ViewStyle>;
 }
 
 interface ToastMethods {
