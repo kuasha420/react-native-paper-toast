@@ -46,6 +46,7 @@ export interface ToastProviderProps {
    * ```
    */
   overrides?: ToastOptions;
+  children: JSX.Element;
 }
 
 export enum ToastActionType {
