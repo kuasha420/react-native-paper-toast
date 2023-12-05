@@ -1,18 +1,21 @@
 import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
-import { Keyboard, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { Portal, Snackbar, Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
+import type {
   ToastAction,
-  ToastActionType,
   ToastIconType,
   ToastMethods,
   ToastOptions,
   ToastParams,
   ToastProviderProps,
   ToastStyles,
+  ToastType,
+  ToastPosition,
 } from './types';
+import { ToastActionType } from './types';
 
 const ToastContext = createContext<ToastMethods | null>(null);
 
@@ -95,6 +98,7 @@ const ToastProvider: React.FC<ToastProviderProps> = ({ children, overrides }) =>
       right: insets.right,
       width: undefined,
       alignItems: 'center',
+      flexDirection: 'row',
     };
     let style: StyleProp<ViewStyle>;
     if (state.position === 'bottom') {
@@ -137,8 +141,8 @@ const ToastProvider: React.FC<ToastProviderProps> = ({ children, overrides }) =>
           visible={state.visibility}
           action={state.action ? { label: state.actionLabel, onPress: state.action } : undefined}
         >
-          <View style={state.messageContainerStyle}>
-            <Icon size={20} name={icons[state.type]} color="#ffffff" />
+          <View style={[styles.container, state.messageContainerStyle]}>
+            <Icon size={24} name={icons[state.type]} color="#ffffff" />
             <Text style={[styles.message, state.messageStyle]}>{` ${state.message}`}</Text>
           </View>
         </Snackbar>
@@ -199,6 +203,7 @@ const icons: ToastIconType = {
 
 const common: ViewStyle = {
   borderRadius: 20,
+  flex: 1,
 };
 
 const types: ToastStyles = {
@@ -225,10 +230,23 @@ const types: ToastStyles = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   message: {
+    marginLeft: 4,
     fontSize: 20,
     color: '#ffffff',
   },
 });
 
-export { ToastProvider, useToast, ToastOptions, ToastProviderProps };
+export { ToastProvider, useToast };
+export type {
+  ToastOptions,
+  ToastProviderProps,
+  ToastParams,
+  ToastStyles,
+  ToastType,
+  ToastPosition,
+};

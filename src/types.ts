@@ -1,7 +1,7 @@
 import type { ViewStyle, StyleProp } from 'react-native';
 
-type ToastType = 'info' | 'normal' | 'success' | 'warning' | 'error';
-type ToastPosition = 'top' | 'bottom' | 'middle';
+export type ToastType = 'info' | 'normal' | 'success' | 'warning' | 'error';
+export type ToastPosition = 'top' | 'bottom' | 'middle';
 
 export interface ToastParams {
   /** The message to show */

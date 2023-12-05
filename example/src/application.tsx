@@ -1,15 +1,8 @@
 import React, { useCallback, useReducer } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import {
-  Button,
-  Headline,
-  Subheading,
-  Surface,
-  Text,
-  TextInput,
-  ToggleButton,
-} from 'react-native-paper';
-import { ToastOptions, useToast } from 'react-native-paper-toast';
+import { Button, Headline, Subheading, Text, TextInput, ToggleButton } from 'react-native-paper';
+import { useToast } from 'react-native-paper-toast';
+import type { ToastOptions, ToastPosition, ToastType } from 'react-native-paper-toast';
 
 const initialToast: ToastOptions = { message: 'Here is a toast for ya!' };
 
@@ -45,7 +38,7 @@ const Application: React.FC = () => {
   );
 
   return (
-    <Surface style={styles.container}>
+    <View style={styles.container}>
       <Headline style={styles.headline}>React Native Paper Toast</Headline>
       <Subheading style={styles.subheading}>Interactive Example</Subheading>
       <View style={styles.row}>
@@ -61,50 +54,53 @@ const Application: React.FC = () => {
       <View style={styles.row}>
         <Text style={styles.label}>Type: </Text>
         <ToggleButton.Row
-          onValueChange={(type: ToastOptions['type']) =>
-            dispatch({ type: ToastActionType.UPDATE, payload: { type } })
+          onValueChange={(type) =>
+            dispatch({ type: ToastActionType.UPDATE, payload: { type: type as ToastType } })
           }
-          value={toastOptions.type}
+          value={toastOptions.type ?? 'normal'}
         >
           <ToggleButton
             icon="information-outline"
             value="normal"
             style={styles.toggle}
-            color={colors.normal}
+            iconColor={colors.normal}
           />
           <ToggleButton
             icon="information-outline"
             value="info"
             style={styles.toggle}
-            color={colors.info}
+            iconColor={colors.info}
           />
           <ToggleButton
             icon="alert-circle-outline"
             value="warning"
             style={styles.toggle}
-            color={colors.warning}
+            iconColor={colors.warning}
           />
           <ToggleButton
             icon="check-circle-outline"
             value="success"
             style={styles.toggle}
-            color={colors.success}
+            iconColor={colors.success}
           />
           <ToggleButton
             icon="close-circle-outline"
             value="error"
             style={styles.toggle}
-            color={colors.error}
+            iconColor={colors.error}
           />
         </ToggleButton.Row>
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Position: </Text>
         <ToggleButton.Row
-          onValueChange={(position: ToastOptions['position']) =>
-            dispatch({ type: ToastActionType.UPDATE, payload: { position } })
+          onValueChange={(position) =>
+            dispatch({
+              type: ToastActionType.UPDATE,
+              payload: { position: position as ToastPosition },
+            })
           }
-          value={toastOptions.position}
+          value={toastOptions.position ?? 'bottom'}
         >
           <ToggleButton icon="arrow-collapse-up" value="top" style={styles.toggle} />
           <ToggleButton icon="plus" value="middle" style={styles.toggle} />
@@ -114,7 +110,7 @@ const Application: React.FC = () => {
       <View style={styles.row}>
         <Text style={styles.label}>Action: </Text>
         <ToggleButton.Row
-          onValueChange={(actionBtn: 'true' | 'false') =>
+          onValueChange={(actionBtn) =>
             dispatch({
               type: ToastActionType.UPDATE,
               payload: { action: actionBtn === 'true' ? action : undefined },
@@ -130,7 +126,7 @@ const Application: React.FC = () => {
         Show Toast
       </Button>
       <Button onPress={toast.hide}>Hide Toast</Button>
-    </Surface>
+    </View>
   );
 };
 

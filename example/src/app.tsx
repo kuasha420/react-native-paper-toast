@@ -1,8 +1,7 @@
 import { loadAsync } from 'expo-font';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 import { ToastProvider } from 'react-native-paper-toast';
-import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context';
 import Application from './application';
 
 export default function App() {
@@ -19,12 +18,8 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <PaperProvider>
-        <ToastProvider>
-          <Application />
-        </ToastProvider>
-      </PaperProvider>
-    </SafeAreaProvider>
+    <ToastProvider>
+      <Application />
+    </ToastProvider>
   );
 }

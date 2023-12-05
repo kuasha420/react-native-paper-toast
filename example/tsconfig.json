@@ -1,9 +1,6 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "../tsconfig",
   "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "react-native-paper-toast": ["../src/index"]
-    }
+    // Avoid expo-cli auto-generating a tsconfig
   }
 }
