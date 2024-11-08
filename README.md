@@ -104,7 +104,7 @@ interface ToastOptions {
   /** Toast Action Label */
   actionLabel?: string;
   /** Toast Message Style */
-  messageStyle: StyleProp<ViewStyle>;
+  messageStyle: StyleProp<TextStyle>;
   /** Toast Message Container Style */
   messageContainerStyle: StyleProp<ViewStyle>;
   /** Toast Snackbar Style */

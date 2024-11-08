@@ -1,4 +1,4 @@
-import type { ViewStyle, StyleProp } from 'react-native';
+import type { ViewStyle, TextStyle, StyleProp } from 'react-native';
 
 export type ToastType = 'info' | 'normal' | 'success' | 'warning' | 'error';
 export type ToastPosition = 'top' | 'bottom' | 'middle';
@@ -19,7 +19,7 @@ export interface ToastParams {
   /** Toast Action Label */
   actionLabel: string;
   /** Toast Message Style */
-  messageStyle: StyleProp<ViewStyle>;
+  messageStyle: StyleProp<TextStyle>;
   /** Toast Message Container Style */
   messageContainerStyle: StyleProp<ViewStyle>;
   /** Toast Snackbar Style */
